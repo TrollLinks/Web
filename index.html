@@ -2,339 +2,146 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Generador de Links Troll</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrollLinks</title>
   <style>
     body {
-      background-color: black;
-      color: white;
       font-family: Arial, sans-serif;
+      background: #121212;
+      color: white;
       margin: 0;
       padding: 0;
+      text-align: center;
     }
     header {
-      background-color: black;
-      text-align: center;
+      background: #1f1f1f;
       padding: 20px;
-      font-size: 36px;
-      font-weight: bold;
-      user-select: none;
     }
-    main {
+    h1 {
+      font-size: 2.5em;
+      margin: 0;
+      color: #00ff88;
+    }
+    .link-section, .comments-section, .footer {
       padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
     }
-    form {
-      margin-bottom: 20px;
-      max-width: 480px;
-      margin-left: auto;
-      margin-right: auto;
-      background: #111;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px #0a84ff66;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-      font-size: 1.1rem;
-    }
-    input[type="text"], select {
-      width: 100%;
+    input[type="text"] {
       padding: 10px;
-      margin-top: 5px;
-      font-size: 16px;
-      border-radius: 4px;
-      border: 1px solid #0a84ff;
-      background-color: #222;
-      color: white;
-      box-sizing: border-box;
-      transition: border-color 0.3s ease;
-    }
-    input[type="text"]:focus, select:focus {
-      border-color: #00aaff;
-      outline: none;
+      width: 60%;
+      border-radius: 8px;
+      border: none;
     }
     button {
-      margin-top: 20px;
-      padding: 12px 25px;
-      font-size: 18px;
-      font-weight: bold;
-      background-color: #0a84ff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      color: white;
-      width: 100%;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #005fbb;
-    }
-    #resultMsg {
-      margin-top: 25px;
-      font-size: 18px;
-      color: #0f0;
-      word-break: break-word;
-      text-align: center;
-      max-width: 480px;
-      margin-left: auto;
-      margin-right: auto;
-      background: #111;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px #0f0a66;
-    }
-    #resultMsg a {
-      color: #0af;
-      text-decoration: underline;
-      font-weight: bold;
-    }
-    #linksContainer {
-      margin-top: 40px;
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
-      border-top: 1px solid #333;
-      padding-top: 20px;
-    }
-    #linksContainer h2 {
-      margin-bottom: 20px;
-      font-weight: 900;
-      color: #0a84ff;
-      text-align: center;
-      user-select: none;
-    }
-    .link-item {
-      margin-bottom: 12px;
-      background: #111;
       padding: 10px 15px;
-      border-radius: 6px;
-      box-shadow: 0 0 8px #0a84ff44;
-      word-break: break-word;
-      font-size: 1rem;
-    }
-    .link-item strong {
-      display: block;
-      margin-bottom: 4px;
-      font-weight: 900;
-      color: #0a84ff;
-    }
-    .link-item a {
-      color: #0af;
-      text-decoration: none;
-      user-select: text;
-    }
-    .link-item a:hover {
-      text-decoration: underline;
-    }
-    #videosPreview {
-      margin-top: 50px;
-      max-width: 1200px;
-      margin-left: auto;
-      margin-right: auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      user-select: none;
-    }
-    .video-card {
-      background-color: #111;
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-      box-shadow: 0 0 12px #0a84ff88;
-    }
-    .video-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 18px #0a84ffcc;
-    }
-    .video-card iframe {
-      width: 100%;
-      height: 135px;
       border: none;
-      display: block;
-      pointer-events: none;
+      border-radius: 8px;
+      background: #00ff88;
+      color: black;
+      cursor: pointer;
     }
-    .video-link-text {
-      padding: 8px;
-      font-weight: bold;
-      text-align: center;
-      color: #0a84ff;
-      background-color: #000;
+    iframe {
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+    .footer {
+      background: #1f1f1f;
+      margin-top: 30px;
+      font-size: 0.9em;
+    }
+    .socials a {
+      color: #00ff88;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+    .comment-box {
+      width: 60%;
+      margin: 10px auto;
+    }
+    .comment-box textarea {
+      width: 100%;
+      height: 80px;
+      border-radius: 8px;
+      border: none;
+      padding: 10px;
     }
   </style>
 </head>
 <body>
-  <header>Generador de Links Troll</header>
-  <main>
-    <form id="linkForm" autocomplete="off">
-      <label for="codigo">Ingresa un código para el link corto (sin espacios):</label>
-      <input type="text" id="codigo" name="codigo" required placeholder="Ejemplo: mi-rickroll" pattern="[^\s]+" title="No se permiten espacios" />
+  <!-- Hey hola } -->
 
-      <label for="videoSelect">Selecciona un video para redirigir:</label>
-      <select id="videoSelect" name="videoSelect" required>
-        <option value="" disabled selected>-- Elige un video --</option>
-      </select>
+  <header>
+    <h1>🎭 TrollLinks</h1>
+    <p>Genera un enlace troll disfrazado</p>
+  </header>
 
-      <button type="submit">Generar Link Corto</button>
-    </form>
+  <div class="link-section">
+    <input type="text" id="linkName" placeholder="Escribe un nombre para el enlace...">
+    <button onclick="generateLink()">Generar Link</button>
 
-    <div id="resultMsg"></div>
+    <div id="generatedLink" style="margin-top:20px; display: none;">
+      <p>Tu enlace troll:</p>
+      <input type="text" id="finalLink" readonly style="width: 80%; padding: 10px; border-radius: 8px;">
+      <br><br>
+      <button onclick="copyLink()">Copiar Link</button>
+    </div>
+  </div>
 
-    <section id="linksContainer">
-      <h2>Links Generados:</h2>
-      <!-- Aquí aparecerán los links -->
-    </section>
+  <div class="video-section">
+    <h2>🔥 Videos Troll Aleatorios</h2>
+    <iframe id="trollVideo" width="560" height="315" src="" allowfullscreen></iframe>
+  </div>
 
-    <section id="videosPreview" aria-label="Previsualización de videos">
-      <!-- Aquí aparecerán las miniaturas con iframe -->
-    </section>
-  </main>
+  <div class="comments-section">
+    <h2>💬 Comentarios</h2>
+    <div class="comment-box">
+      <textarea placeholder="Escribe tu comentario..."></textarea><br>
+      <button onclick="alert('Comentario enviado 👻')">Enviar</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <h3>⚠️ Descargo de responsabilidad</h3>
+    <p>No nos hacemos responsables por el uso indebido de los enlaces generados con TrollLinks.</p>
+    <div class="socials">
+      📱 <a href="https://www.tiktok.com/@tutiktok" target="_blank">TikTok</a> |
+      📺 <a href="https://www.youtube.com/@tucanal" target="_blank">YouTube</a> |
+      💬 <a href="https://discord.gg/tuserver" target="_blank">Discord</a>
+    </div>
+  </div>
 
   <script>
-    // Videos disponibles
-    const videosTroll = [
-      {
-        title: 'Rickroll clásico',
-        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-      },
-      {
-        title: 'Rickroll 2',
-        url: 'https://www.youtube.com/watch?v=oHg5SJYRHA0'
-      },
-      {
-        title: 'Nyan Cat',
-        url: 'https://www.youtube.com/watch?v=QH2-TGUlwu4'
-      },
-      {
-        title: 'Charlie bit my finger',
-        url: 'https://www.youtube.com/watch?v=3tmd-ClpJxA'
-      },
-      {
-        title: 'Trololol',
-        url: 'https://www.youtube.com/watch?v=DLzxrzFCyOs'
-      },
+    const videos = [
+      "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "https://www.youtube.com/embed/tVj0ZTS4WF4",
+      "https://www.youtube.com/embed/9Deg7VrpHbM",
+      "https://www.youtube.com/embed/Sagg08DrO5U",
+      "https://www.youtube.com/embed/F2k9-PY3vY0",
+      "https://www.youtube.com/embed/_QdPW8JrYzQ"
     ];
 
-    // Cargar links guardados en localStorage o iniciar vacío
-    let links = JSON.parse(localStorage.getItem('linksTroll')) || {};
-
-    // Extraer ID del video para iframe
-    function getYoutubeID(url) {
-      const regex = /(?:v=|\/)([0-9A-Za-z_-]{11})(?:\?|&|$)/;
-      const match = url.match(regex);
-      return match ? match[1] : null;
-    }
-
-    // Rellenar select con opciones de videos
-    function llenarSelectVideos() {
-      const select = document.getElementById('videoSelect');
-      videosTroll.forEach(video => {
-        const option = document.createElement('option');
-        option.value = video.url;
-        option.textContent = video.title;
-        select.appendChild(option);
-      });
-    }
-
-    // Mostrar los links guardados en la lista
-    function mostrarLinksGuardados() {
-      const container = document.getElementById('linksContainer');
-      container.innerHTML = '<h2>Links Generados:</h2>'; // Reset con título
-      for (const codigo in links) {
-        const generatedLink = `${window.location.origin}${window.location.pathname}#${codigo}`;
-        addLinkToList(codigo, generatedLink);
-      }
-    }
-
-    // Añadir un link a la lista visible
-    function addLinkToList(codigo, link) {
-      const container = document.getElementById('linksContainer');
-      const div = document.createElement('div');
-      div.classList.add('link-item');
-      div.innerHTML = `
-        <strong>${codigo}</strong>
-        <a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a>
-      `;
-      container.appendChild(div);
-    }
-
-    // Formulario: crear link corto y guardarlo
-    document.getElementById('linkForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const codigo = document.getElementById('codigo').value.trim();
-      const videoUrl = document.getElementById('videoSelect').value;
-
-      if (!codigo || !videoUrl) {
-        alert('Por favor ingresa un código y selecciona un video.');
+    function generateLink() {
+      const name = document.getElementById("linkName").value.trim();
+      if (name === "") {
+        alert("Escribe un nombre para el enlace");
         return;
       }
 
-      if (/\s/.test(codigo)) {
-        alert('El código no puede contener espacios.');
-        return;
-      }
+      const encoded = encodeURIComponent(name);
+      const url = `https://trolllinks.github.io/Web/#${encoded}`;
+      document.getElementById("finalLink").value = url;
+      document.getElementById("generatedLink").style.display = "block";
 
-      if (links[codigo]) {
-        alert('El código ya existe. Usa otro.');
-        return;
-      }
-
-      // Guardar nuevo link
-      links[codigo] = videoUrl;
-      localStorage.setItem('linksTroll', JSON.stringify(links));
-
-      // Mostrar mensaje con link generado
-      const resultMsg = document.getElementById('resultMsg');
-      const generatedLink = `${window.location.origin}${window.location.pathname}#${codigo}`;
-      resultMsg.innerHTML = `Link generado: <a href="${generatedLink}" target="_blank" rel="noopener noreferrer">${generatedLink}</a>`;
-
-      // Agregar a la lista visible
-      addLinkToList(codigo, generatedLink);
-
-      // Resetear formulario
-      this.reset();
-    });
-
-    // Mostrar previews con iframes y títulos
-    function mostrarVideosPreview() {
-      const container = document.getElementById('videosPreview');
-      videosTroll.forEach(video => {
-        const id = getYoutubeID(video.url);
-        if (!id) return;
-
-        const card = document.createElement('div');
-        card.classList.add('video-card');
-        card.title = video.title;
-
-        card.innerHTML = `
-          <iframe src="https://www.youtube.com/embed/${id}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          <div class="video-link-text">${video.title}</div>
-        `;
-
-        card.addEventListener('click', () => {
-          window.open(video.url, '_blank');
-        });
-
-        container.appendChild(card);
-      });
+      const random = Math.floor(Math.random() * videos.length);
+      document.getElementById("trollVideo").src = videos[random];
     }
 
-    // Al cargar la página
-    window.addEventListener('load', () => {
-      llenarSelectVideos();
-      mostrarLinksGuardados();
-      mostrarVideosPreview();
-
-      const hash = window.location.hash.slice(1);
-      if (hash && links[hash]) {
-        window.location.href = links[hash];
-      }
-    });
+    function copyLink() {
+      const linkInput = document.getElementById("finalLink");
+      linkInput.select();
+      linkInput.setSelectionRange(0, 99999); // Para dispositivos móviles
+      document.execCommand("copy");
+      alert("¡Link copiado!");
+    }
   </script>
 </body>
 </html>
