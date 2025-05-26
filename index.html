@@ -13,8 +13,8 @@
       background-color: #000;
       color: #fff;
       text-align: center;
-      font-weight: bold; /* Texto en negrita */
-      color: #fff; /* Texto blanco */
+      font-weight: bold;
+      color: #fff;
     }
 
     h1 {
@@ -153,6 +153,82 @@
       height: 140px;
       pointer-events: none; /* evitar interacción en thumbnails */
     }
+
+    /* Comentarios */
+    #commentsSection {
+      background: #111;
+      border: 2px solid #0ff;
+      box-shadow: 0 0 20px #0ff;
+      border-radius: 15px;
+      padding: 20px;
+      max-width: 700px;
+      margin: 30px auto;
+      display: none; /* Oculto por defecto */
+      text-align: left;
+      font-weight: normal;
+    }
+
+    #commentsList {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+      border: 1px solid #0ff;
+      padding: 10px;
+      border-radius: 10px;
+      background-color: #000;
+      color: #0ff;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+    }
+
+    #commentInput {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 2px solid #0ff;
+      background-color: #222;
+      color: #0ff;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      outline: none;
+    }
+
+    #addCommentBtn {
+      margin-top: 10px;
+      background: #0ff;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 10px #0ff;
+      transition: 0.3s ease;
+    }
+
+    #addCommentBtn:hover {
+      background: #00f7ff;
+      transform: scale(1.05);
+    }
+
+    #toggleCommentsBtn {
+      background: transparent;
+      border: 2px solid #0ff;
+      border-radius: 10px;
+      color: #0ff;
+      padding: 10px 25px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0ff;
+      transition: 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    #toggleCommentsBtn:hover {
+      background: #00f7ff;
+      color: #000;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
@@ -194,11 +270,22 @@
       <div id="videoGallery"></div>
     </div>
 
+    <!-- Botón para comentarios -->
+    <button id="toggleCommentsBtn">💬 Mostrar/Ocultar Comentarios</button>
+
+    <!-- Sección Comentarios -->
+    <div id="commentsSection">
+      <div id="commentsList"></div>
+      <input type="text" id="commentInput" placeholder="Escribe tu comentario aquí..." />
+      <button id="addCommentBtn">Enviar comentario</button>
+    </div>
+
     <!-- Sección de Redes -->
     <div class="section socials">
       <h2>🌐 Mis redes sociales</h2>
       <b onclick="window.open('https://www.tiktok.com/@violentflow', '_blank')">🎵 TikTok: @violentflow</b>
       <b onclick="window.open('https://www.youtube.com/channel/UCyqO_K-rM_6W5cY7HQt0TrQ', '_blank')">📺 YouTube: Violent Flow Oficial</b>
+      <b onclick="window.open('https://discord.gg/tuServidorDiscord', '_blank')">💬 Discord: Únete a nuestro servidor [PROXIMAMENTE]</b>
     </div>
 
     <!-- Sección Legal -->
@@ -228,11 +315,13 @@
       const selectedVideo = document.getElementById("videoSelector").value;
       if (!name) return alert("Escribe un nombre para tu link troll.");
 
+      // Construimos el link con el parámetro link
       const fullLink = `${location.origin}${location.pathname}?link=${encodeURIComponent(name)}`;
       document.getElementById("generated").innerText = fullLink;
       document.getElementById("generated").style.display = "inline-block";
       document.getElementById("copyBtn").style.display = "inline-block";
 
+      // Guardamos el video asociado solo en sessionStorage (no listado público)
       sessionStorage.setItem(name, selectedVideo);
     }
 
@@ -243,30 +332,84 @@
       });
     }
 
+    // Comentarios con localStorage (simple)
+    function loadComments() {
+      const commentsJSON = localStorage.getItem("trollLinksComments");
+      return commentsJSON ? JSON.parse(commentsJSON) : [];
+    }
+
+    function saveComments(comments) {
+      localStorage.setItem("trollLinksComments", JSON.stringify(comments));
+    }
+
+    function renderComments() {
+      const commentsList = document.getElementById("commentsList");
+      const comments = loadComments();
+      if(comments.length === 0) {
+        commentsList.innerHTML = "<i>No hay comentarios aún. Sé el primero en comentar.</i>";
+        return;
+      }
+      commentsList.innerHTML = comments.map(c => `<p>💬 ${escapeHtml(c)}</p>`).join("");
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+    }
+
+    function addComment() {
+      const input = document.getElementById("commentInput");
+      const comment = input.value.trim();
+      if (!comment) {
+        alert("Escribe un comentario antes de enviar.");
+        return;
+      }
+      const comments = loadComments();
+      comments.push(comment);
+      saveComments(comments);
+      input.value = "";
+      renderComments();
+    }
+
+    document.getElementById("addCommentBtn").addEventListener("click", addComment);
+    document.getElementById("toggleCommentsBtn").addEventListener("click", () => {
+      const commentsSection = document.getElementById("commentsSection");
+      if (commentsSection.style.display === "none" || commentsSection.style.display === "") {
+        commentsSection.style.display = "block";
+        renderComments();
+      } else {
+        commentsSection.style.display = "none";
+      }
+    });
+
     window.onload = () => {
       const params = new URLSearchParams(window.location.search);
       const linkName = params.get("link");
       if (linkName) {
+        // Mostramos el video asociado almacenado en sessionStorage o el primero
         const videoURL = sessionStorage.getItem(linkName) || videos[0].url;
         document.getElementById("videoEmbed").style.display = "block";
         document.getElementById("videoFrame").src = videoURL;
       }
 
+      // Galería de videos
       const gallery = document.getElementById("videoGallery");
-      videos.forEach((video) => {
+      for (const vid of videos) {
         const div = document.createElement("div");
         div.className = "video-item";
-        div.title = video.name;
-        div.innerHTML = `<iframe src="${video.url}" frameborder="0" allowfullscreen></iframe>`;
-        div.addEventListener("click", () => {
+        div.title = vid.name;
+        div.innerHTML = `<iframe src="${vid.url}" frameborder="0" allowfullscreen></iframe><p>${vid.name}</p>`;
+        div.onclick = () => {
           document.getElementById("videoEmbed").style.display = "block";
-          document.getElementById("videoFrame").src = video.url;
-        });
+          document.getElementById("videoFrame").src = vid.url;
+        }
         gallery.appendChild(div);
-      });
+      }
     };
   </script>
 
-  <!-- Hey hola 👋 Bienvenido al código fuente de TrollLinks 😎 -->
 </body>
 </html>
