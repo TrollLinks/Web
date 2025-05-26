@@ -1,132 +1,269 @@
-<!-- Lo demás igual, sólo cambia el script -->
-
-<script>
-  // Obtener links guardados en localStorage o iniciar vacío
-  const links = JSON.parse(localStorage.getItem('linksTroll')) || {};
-
-  // Extraer ID del video de YouTube para embed (mejor regex más robusta)
-  function getYoutubeID(url) {
-    // Esto captura el id en varios formatos de url Youtube
-    const regex = /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const match = url.match(regex);
-    return match ? match[1] : null;
-  }
-
-  // Añadir enlace a la lista visible
-  function addLinkToList(codigo, link) {
-    const container = document.getElementById('linksContainer');
-    // Evitar duplicados visuales al recargar
-    if ([...container.children].some(div => div.textContent.includes(codigo))) return;
-    const div = document.createElement('div');
-    div.classList.add('link-item');
-    div.innerHTML = `
-      <strong>${codigo}</strong><br />
-      <a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a>
-    `;
-    container.appendChild(div);
-  }
-
-  // Mostrar todos los links guardados al cargar la página
-  function cargarLinksGuardados() {
-    for (const codigo in links) {
-      const generatedLink = `${window.location.origin}${window.location.pathname}#${codigo}`;
-      addLinkToList(codigo, generatedLink);
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Generador de Links Troll</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
     }
-  }
+    header {
+      background-color: black;
+      text-align: center;
+      padding: 20px;
+      font-size: 36px;
+      font-weight: bold;
+    }
+    main {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      background-color: #0a84ff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+    button:hover {
+      background-color: #0066cc;
+    }
+    #resultMsg {
+      margin-top: 15px;
+      font-size: 18px;
+      color: #0f0;
+      word-break: break-all;
+    }
+    #linksContainer {
+      margin-top: 30px;
+      border-top: 1px solid #444;
+      padding-top: 20px;
+    }
+    .link-item {
+      margin-bottom: 12px;
+    }
+    .link-item a {
+      color: #0a84ff;
+      text-decoration: none;
+    }
+    .link-item a:hover {
+      text-decoration: underline;
+    }
+    #videosPreview {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .video-card {
+      background-color: #111;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .video-card:hover {
+      transform: scale(1.05);
+    }
+    .video-card iframe {
+      width: 100%;
+      height: 135px;
+      border: none;
+      display: block;
+    }
+    .video-link-text {
+      padding: 8px;
+      font-weight: bold;
+      text-align: center;
+      color: #0a84ff;
+    }
+  </style>
+</head>
+<body>
+  <header>Generador de Links Troll</header>
+  <main>
+    <form id="linkForm">
+      <label for="codigo">Ingresa un código para el link corto (sin espacios):</label>
+      <input type="text" id="codigo" name="codigo" required placeholder="Ejemplo: mi-rickroll" />
 
-  // Crear enlace corto y almacenarlo (y guardar en localStorage)
-  document.getElementById('linkForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const codigo = document.getElementById('codigo').value.trim();
-    const videoUrl = document.getElementById('videoSelect').value;
+      <label for="videoSelect">Selecciona un video para redirigir:</label>
+      <select id="videoSelect" name="videoSelect" required>
+        <option value="" disabled selected>-- Elige un video --</option>
+      </select>
 
-    if (!codigo || !videoUrl) {
-      alert('Por favor ingresa un código y selecciona un video.');
-      return;
+      <button type="submit">Generar Link Corto</button>
+    </form>
+
+    <div id="resultMsg"></div>
+
+    <section id="linksContainer">
+      <h2>Links Generados:</h2>
+      <!-- Aquí aparecerán los links -->
+    </section>
+
+    <section id="videosPreview">
+      <!-- Aquí aparecerán las miniaturas con iframe -->
+    </section>
+  </main>
+
+  <script>
+    // Videos disponibles
+    const videosTroll = [
+      {
+        title: 'Rickroll clásico',
+        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+      },
+      {
+        title: 'Rickroll 2',
+        url: 'https://www.youtube.com/watch?v=oHg5SJYRHA0'
+      },
+      {
+        title: 'Nyan Cat',
+        url: 'https://www.youtube.com/watch?v=QH2-TGUlwu4'
+      },
+      {
+        title: 'Charlie bit my finger',
+        url: 'https://www.youtube.com/watch?v=3tmd-ClpJxA'
+      },
+      {
+        title: 'Trololol',
+        url: 'https://www.youtube.com/watch?v=DLzxrzFCyOs'
+      },
+    ];
+
+    // Cargar links guardados en localStorage o iniciar vacío
+    let links = JSON.parse(localStorage.getItem('linksTroll')) || {};
+
+    // Extraer ID del video para iframe
+    function getYoutubeID(url) {
+      const regex = /(?:v=|\/)([0-9A-Za-z_-]{11})(?:\?|&|$)/;
+      const match = url.match(regex);
+      return match ? match[1] : null;
     }
 
-    if (links[codigo]) {
-      alert('El código ya existe. Usa otro.');
-      return;
-    }
-
-    // Guardar en el objeto links y localStorage
-    links[codigo] = videoUrl;
-    localStorage.setItem('linksTroll', JSON.stringify(links));
-
-    // Mostrar mensaje
-    const resultMsg = document.getElementById('resultMsg');
-    const generatedLink = `${window.location.origin}${window.location.pathname}#${codigo}`;
-    resultMsg.textContent = `Link generado: ${generatedLink}`;
-
-    // Mostrar en lista
-    addLinkToList(codigo, generatedLink);
-
-    // Limpiar formulario
-    this.reset();
-  });
-
-  // Al cargar la página, cargar links guardados y redirigir si hay hash
-  window.addEventListener('load', () => {
-    cargarLinksGuardados();
-
-    const hash = window.location.hash.slice(1);
-    if (hash && links[hash]) {
-      // Redirigir al link original (con retardo para mostrar lista primero)
-      setTimeout(() => {
-        window.location.href = links[hash];
-      }, 500);
-    }
-  });
-
-  // Videos disponibles (igual)
-  const videosTroll = [
-    {
-      title: 'Rickroll clásico',
-      url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-    },
-    {
-      title: 'Rickroll 2',
-      url: 'https://www.youtube.com/watch?v=oHg5SJYRHA0'
-    },
-    {
-      title: 'Nyan Cat',
-      url: 'https://www.youtube.com/watch?v=QH2-TGUlwu4'
-    },
-    {
-      title: 'Charlie bit my finger',
-      url: 'https://www.youtube.com/watch?v=3tmd-ClpJxA'
-    },
-    {
-      title: 'Trololol',
-      url: 'https://www.youtube.com/watch?v=DLzxrzFCyOs'
-    },
-  ];
-
-  // Mostrar videos en la sección preview
-  function mostrarVideosPreview() {
-    const container = document.getElementById('videosPreview');
-    videosTroll.forEach(video => {
-      const id = getYoutubeID(video.url);
-      if (!id) return;
-
-      const card = document.createElement('div');
-      card.classList.add('video-card');
-      card.title = video.title;
-
-      card.innerHTML = `
-        <iframe src="https://www.youtube.com/embed/${id}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        <div class="video-link-text">${video.title}</div>
-      `;
-
-      card.addEventListener('click', () => {
-        window.open(video.url, '_blank');
+    // Rellenar select con opciones de videos
+    function llenarSelectVideos() {
+      const select = document.getElementById('videoSelect');
+      videosTroll.forEach(video => {
+        const option = document.createElement('option');
+        option.value = video.url;
+        option.textContent = video.title;
+        select.appendChild(option);
       });
+    }
 
-      container.appendChild(card);
+    // Mostrar los links guardados en la lista
+    function mostrarLinksGuardados() {
+      const container = document.getElementById('linksContainer');
+      container.innerHTML = '<h2>Links Generados:</h2>'; // Reset con título
+      for (const codigo in links) {
+        const generatedLink = `${window.location.origin}${window.location.pathname}#${codigo}`;
+        addLinkToList(codigo, generatedLink);
+      }
+    }
+
+    // Añadir un link a la lista visible
+    function addLinkToList(codigo, link) {
+      const container = document.getElementById('linksContainer');
+      const div = document.createElement('div');
+      div.classList.add('link-item');
+      div.innerHTML = `
+        <strong>${codigo}</strong><br />
+        <a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a>
+      `;
+      container.appendChild(div);
+    }
+
+    // Formulario: crear link corto y guardarlo
+    document.getElementById('linkForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const codigo = document.getElementById('codigo').value.trim();
+      const videoUrl = document.getElementById('videoSelect').value;
+
+      if (!codigo || !videoUrl) {
+        alert('Por favor ingresa un código y selecciona un video.');
+        return;
+      }
+
+      if (links[codigo]) {
+        alert('El código ya existe. Usa otro.');
+        return;
+      }
+
+      // Guardar nuevo link
+      links[codigo] = videoUrl;
+      localStorage.setItem('linksTroll', JSON.stringify(links));
+
+      // Mostrar mensaje con link generado
+      const resultMsg = document.getElementById('resultMsg');
+      const generatedLink = `${window.location.origin}${window.location.pathname}#${codigo}`;
+      resultMsg.textContent = `Link generado: ${generatedLink}`;
+
+      // Agregar a la lista visible
+      addLinkToList(codigo, generatedLink);
+
+      // Resetear formulario
+      this.reset();
     });
-  }
 
-  mostrarVideosPreview();
+    // Mostrar previews con iframes y títulos
+    function mostrarVideosPreview() {
+      const container = document.getElementById('videosPreview');
+      videosTroll.forEach(video => {
+        const id = getYoutubeID(video.url);
+        if (!id) return;
 
-</script>
+        const card = document.createElement('div');
+        card.classList.add('video-card');
+        card.title = video.title;
+
+        card.innerHTML = `
+          <iframe src="https://www.youtube.com/embed/${id}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <div class="video-link-text">${video.title}</div>
+        `;
+
+        card.addEventListener('click', () => {
+          window.open(video.url, '_blank');
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    // Al cargar la página
+    window.addEventListener('load', () => {
+      llenarSelectVideos();
+      mostrarLinksGuardados();
+
+      const hash = window.location.hash.slice(1);
+      if (hash && links[hash]) {
+        window.location.href = links[hash];
+      }
+    });
+  </script>
+</body>
+</html>
