@@ -10,30 +10,31 @@
       margin: 0;
       padding: 0;
       font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #000);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
+      background-color: #000;
       color: #fff;
       text-align: center;
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     h1 {
       font-size: 3rem;
       color: #0ff;
       text-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
-      margin-top: 40px;
+      margin: 40px 0 20px;
     }
 
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
-      padding: 30px;
+      padding: 20px;
+    }
+
+    .section {
+      background: #111;
+      border: 2px solid #0ff;
+      box-shadow: 0 0 20px #0ff;
+      border-radius: 15px;
+      padding: 25px;
+      margin: 30px 0;
     }
 
     select, input, button {
@@ -79,7 +80,7 @@
     }
 
     .embed {
-      margin: 40px auto;
+      margin: 30px auto;
       max-width: 640px;
       border: 4px solid #0ff;
       box-shadow: 0 0 25px #0ff;
@@ -87,23 +88,19 @@
       overflow: hidden;
     }
 
-    .socials, .legal {
-      margin-top: 50px;
+    h2, h3 {
+      color: #0ff;
+      text-shadow: 0 0 10px #0ff;
+      margin-bottom: 10px;
     }
 
     .socials b, .legal b {
       display: block;
       margin: 10px 0;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: #0ff;
       text-shadow: 0 0 5px #0ff;
     }
-
-    h2, h3 {
-      color: #0ff;
-      text-shadow: 0 0 10px #0ff;
-    }
-
   </style>
 </head>
 <body>
@@ -111,35 +108,43 @@
   <h1>🎭 TrollLinks</h1>
   <div class="container">
 
-    <select id="videoSelector">
-      <option value="https://www.youtube.com/embed/dQw4w9WgXcQ">Rickroll clásico</option>
-      <option value="https://www.youtube.com/embed/ub82Xb1C8os">Buey girando</option>
-      <option value="https://www.youtube.com/embed/ZZ5LpwO-An4">He-Man canta</option>
-      <option value="https://www.youtube.com/embed/tVj0ZTS4WF4">Rickroll HD</option>
-      <option value="https://www.youtube.com/embed/xvFZjo5PgG0">Never Gonna Give You Up (HD oficial)</option>
-      <option value="https://www.youtube.com/embed/IwzUs1IMdyQ">Dramatic Chipmunk</option>
-      <option value="https://www.youtube.com/embed/Sagg08DrO5U">¡Surprise!</option>
-      <option value="https://www.youtube.com/embed/9Deg7VrpHbM">Megalovania Remix</option>
-      <option value="https://www.youtube.com/embed/oHg5SJYRHA0">Rickroll alternativo</option>
-    </select>
-
-    <input type="text" id="customName" placeholder="Escribe el nombre del link" />
-    <button onclick="generateLink()">Generar Link Troll</button>
-
-    <div id="generated" class="generated-link" style="display:none;"></div>
-    <button class="copy-btn" id="copyBtn" style="display:none;" onclick="copyLink()">Copiar Link</button>
-
-    <div class="embed" id="videoEmbed" style="display:none;">
-      <iframe id="videoFrame" width="100%" height="360" frameborder="0" allowfullscreen></iframe>
+    <!-- Sección de Generador -->
+    <div class="section">
+      <h2>🎯 Generador de Link Troll</h2>
+      <select id="videoSelector">
+        <option value="https://www.youtube.com/embed/dQw4w9WgXcQ">Rickroll clásico</option>
+        <option value="https://www.youtube.com/embed/ub82Xb1C8os">Buey girando</option>
+        <option value="https://www.youtube.com/embed/ZZ5LpwO-An4">He-Man canta</option>
+        <option value="https://www.youtube.com/embed/tVj0ZTS4WF4">Rickroll HD</option>
+        <option value="https://www.youtube.com/embed/xvFZjo5PgG0">Never Gonna Give You Up (HD oficial)</option>
+        <option value="https://www.youtube.com/embed/IwzUs1IMdyQ">Dramatic Chipmunk</option>
+        <option value="https://www.youtube.com/embed/Sagg08DrO5U">¡Surprise!</option>
+        <option value="https://www.youtube.com/embed/9Deg7VrpHbM">Megalovania Remix</option>
+        <option value="https://www.youtube.com/embed/oHg5SJYRHA0">Rickroll alternativo</option>
+      </select><br>
+      <input type="text" id="customName" placeholder="Escribe el nombre del link" /><br>
+      <button onclick="generateLink()">Generar Link Troll</button>
+      <div id="generated" class="generated-link" style="display:none;"></div>
+      <button id="copyBtn" style="display:none;" onclick="copyLink()">Copiar Link</button>
     </div>
 
-    <div class="socials">
+    <!-- Sección de Video -->
+    <div class="section" id="videoEmbed" style="display:none;">
+      <h2>🎬 Video Troll</h2>
+      <div class="embed">
+        <iframe id="videoFrame" width="100%" height="360" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <!-- Sección de Redes -->
+    <div class="section socials">
       <h2>🌐 Mis redes sociales</h2>
-      <b>🎵 TikTok: @trolllinks</b>
-      <b>📺 YouTube: TrollLinks Oficial</b>
+      <b>🎵 TikTok: @violentflow</b>
+      <b>📺 YouTube: @ViolentFlow</b>
     </div>
 
-    <div class="legal">
+    <!-- Sección Legal -->
+    <div class="section legal">
       <h3>⚠️ Descargo de responsabilidad</h3>
       <b>No nos hacemos responsables del uso indebido de los enlaces generados.</b>
       <b>🧪 Esta es una versión de prueba / beta del sitio web.</b>
