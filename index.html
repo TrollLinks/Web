@@ -18,6 +18,7 @@
       padding: 20px;
       font-size: 36px;
       font-weight: bold;
+      user-select: none;
     }
     main {
       padding: 20px;
@@ -26,58 +27,118 @@
     }
     form {
       margin-bottom: 20px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      background: #111;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #0a84ff66;
     }
     label {
       display: block;
-      margin-top: 10px;
+      margin-top: 15px;
       font-weight: bold;
+      font-size: 1.1rem;
     }
     input[type="text"], select {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
       margin-top: 5px;
       font-size: 16px;
+      border-radius: 4px;
+      border: 1px solid #0a84ff;
+      background-color: #222;
+      color: white;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+    input[type="text"]:focus, select:focus {
+      border-color: #00aaff;
+      outline: none;
     }
     button {
-      margin-top: 15px;
-      padding: 10px 20px;
+      margin-top: 20px;
+      padding: 12px 25px;
       font-size: 18px;
       font-weight: bold;
       background-color: #0a84ff;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
       color: white;
+      width: 100%;
+      transition: background-color 0.3s ease;
     }
     button:hover {
-      background-color: #0066cc;
+      background-color: #005fbb;
     }
     #resultMsg {
-      margin-top: 15px;
+      margin-top: 25px;
       font-size: 18px;
       color: #0f0;
-      word-break: break-all;
+      word-break: break-word;
+      text-align: center;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      background: #111;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px #0f0a66;
+    }
+    #resultMsg a {
+      color: #0af;
+      text-decoration: underline;
+      font-weight: bold;
     }
     #linksContainer {
-      margin-top: 30px;
-      border-top: 1px solid #444;
+      margin-top: 40px;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      border-top: 1px solid #333;
       padding-top: 20px;
+    }
+    #linksContainer h2 {
+      margin-bottom: 20px;
+      font-weight: 900;
+      color: #0a84ff;
+      text-align: center;
+      user-select: none;
     }
     .link-item {
       margin-bottom: 12px;
+      background: #111;
+      padding: 10px 15px;
+      border-radius: 6px;
+      box-shadow: 0 0 8px #0a84ff44;
+      word-break: break-word;
+      font-size: 1rem;
+    }
+    .link-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 900;
+      color: #0a84ff;
     }
     .link-item a {
-      color: #0a84ff;
+      color: #0af;
       text-decoration: none;
+      user-select: text;
     }
     .link-item a:hover {
       text-decoration: underline;
     }
     #videosPreview {
-      margin-top: 40px;
+      margin-top: 50px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 20px;
+      user-select: none;
     }
     .video-card {
       background-color: #111;
@@ -85,30 +146,34 @@
       overflow: hidden;
       cursor: pointer;
       transition: transform 0.2s ease;
+      box-shadow: 0 0 12px #0a84ff88;
     }
     .video-card:hover {
       transform: scale(1.05);
+      box-shadow: 0 0 18px #0a84ffcc;
     }
     .video-card iframe {
       width: 100%;
       height: 135px;
       border: none;
       display: block;
+      pointer-events: none;
     }
     .video-link-text {
       padding: 8px;
       font-weight: bold;
       text-align: center;
       color: #0a84ff;
+      background-color: #000;
     }
   </style>
 </head>
 <body>
   <header>Generador de Links Troll</header>
   <main>
-    <form id="linkForm">
+    <form id="linkForm" autocomplete="off">
       <label for="codigo">Ingresa un código para el link corto (sin espacios):</label>
-      <input type="text" id="codigo" name="codigo" required placeholder="Ejemplo: mi-rickroll" />
+      <input type="text" id="codigo" name="codigo" required placeholder="Ejemplo: mi-rickroll" pattern="[^\s]+" title="No se permiten espacios" />
 
       <label for="videoSelect">Selecciona un video para redirigir:</label>
       <select id="videoSelect" name="videoSelect" required>
@@ -125,7 +190,7 @@
       <!-- Aquí aparecerán los links -->
     </section>
 
-    <section id="videosPreview">
+    <section id="videosPreview" aria-label="Previsualización de videos">
       <!-- Aquí aparecerán las miniaturas con iframe -->
     </section>
   </main>
@@ -192,7 +257,7 @@
       const div = document.createElement('div');
       div.classList.add('link-item');
       div.innerHTML = `
-        <strong>${codigo}</strong><br />
+        <strong>${codigo}</strong>
         <a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a>
       `;
       container.appendChild(div);
@@ -209,6 +274,11 @@
         return;
       }
 
+      if (/\s/.test(codigo)) {
+        alert('El código no puede contener espacios.');
+        return;
+      }
+
       if (links[codigo]) {
         alert('El código ya existe. Usa otro.');
         return;
@@ -221,7 +291,7 @@
       // Mostrar mensaje con link generado
       const resultMsg = document.getElementById('resultMsg');
       const generatedLink = `${window.location.origin}${window.location.pathname}#${codigo}`;
-      resultMsg.textContent = `Link generado: ${generatedLink}`;
+      resultMsg.innerHTML = `Link generado: <a href="${generatedLink}" target="_blank" rel="noopener noreferrer">${generatedLink}</a>`;
 
       // Agregar a la lista visible
       addLinkToList(codigo, generatedLink);
@@ -258,6 +328,7 @@
     window.addEventListener('load', () => {
       llenarSelectVideos();
       mostrarLinksGuardados();
+      mostrarVideosPreview();
 
       const hash = window.location.hash.slice(1);
       if (hash && links[hash]) {
