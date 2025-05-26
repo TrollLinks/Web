@@ -1,0 +1,132 @@
+<!-- Lo demás igual, sólo cambia el script -->
+
+<script>
+  // Obtener links guardados en localStorage o iniciar vacío
+  const links = JSON.parse(localStorage.getItem('linksTroll')) || {};
+
+  // Extraer ID del video de YouTube para embed (mejor regex más robusta)
+  function getYoutubeID(url) {
+    // Esto captura el id en varios formatos de url Youtube
+    const regex = /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
+  }
+
+  // Añadir enlace a la lista visible
+  function addLinkToList(codigo, link) {
+    const container = document.getElementById('linksContainer');
+    // Evitar duplicados visuales al recargar
+    if ([...container.children].some(div => div.textContent.includes(codigo))) return;
+    const div = document.createElement('div');
+    div.classList.add('link-item');
+    div.innerHTML = `
+      <strong>${codigo}</strong><br />
+      <a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a>
+    `;
+    container.appendChild(div);
+  }
+
+  // Mostrar todos los links guardados al cargar la página
+  function cargarLinksGuardados() {
+    for (const codigo in links) {
+      const generatedLink = `${window.location.origin}${window.location.pathname}#${codigo}`;
+      addLinkToList(codigo, generatedLink);
+    }
+  }
+
+  // Crear enlace corto y almacenarlo (y guardar en localStorage)
+  document.getElementById('linkForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const codigo = document.getElementById('codigo').value.trim();
+    const videoUrl = document.getElementById('videoSelect').value;
+
+    if (!codigo || !videoUrl) {
+      alert('Por favor ingresa un código y selecciona un video.');
+      return;
+    }
+
+    if (links[codigo]) {
+      alert('El código ya existe. Usa otro.');
+      return;
+    }
+
+    // Guardar en el objeto links y localStorage
+    links[codigo] = videoUrl;
+    localStorage.setItem('linksTroll', JSON.stringify(links));
+
+    // Mostrar mensaje
+    const resultMsg = document.getElementById('resultMsg');
+    const generatedLink = `${window.location.origin}${window.location.pathname}#${codigo}`;
+    resultMsg.textContent = `Link generado: ${generatedLink}`;
+
+    // Mostrar en lista
+    addLinkToList(codigo, generatedLink);
+
+    // Limpiar formulario
+    this.reset();
+  });
+
+  // Al cargar la página, cargar links guardados y redirigir si hay hash
+  window.addEventListener('load', () => {
+    cargarLinksGuardados();
+
+    const hash = window.location.hash.slice(1);
+    if (hash && links[hash]) {
+      // Redirigir al link original (con retardo para mostrar lista primero)
+      setTimeout(() => {
+        window.location.href = links[hash];
+      }, 500);
+    }
+  });
+
+  // Videos disponibles (igual)
+  const videosTroll = [
+    {
+      title: 'Rickroll clásico',
+      url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+    },
+    {
+      title: 'Rickroll 2',
+      url: 'https://www.youtube.com/watch?v=oHg5SJYRHA0'
+    },
+    {
+      title: 'Nyan Cat',
+      url: 'https://www.youtube.com/watch?v=QH2-TGUlwu4'
+    },
+    {
+      title: 'Charlie bit my finger',
+      url: 'https://www.youtube.com/watch?v=3tmd-ClpJxA'
+    },
+    {
+      title: 'Trololol',
+      url: 'https://www.youtube.com/watch?v=DLzxrzFCyOs'
+    },
+  ];
+
+  // Mostrar videos en la sección preview
+  function mostrarVideosPreview() {
+    const container = document.getElementById('videosPreview');
+    videosTroll.forEach(video => {
+      const id = getYoutubeID(video.url);
+      if (!id) return;
+
+      const card = document.createElement('div');
+      card.classList.add('video-card');
+      card.title = video.title;
+
+      card.innerHTML = `
+        <iframe src="https://www.youtube.com/embed/${id}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="video-link-text">${video.title}</div>
+      `;
+
+      card.addEventListener('click', () => {
+        window.open(video.url, '_blank');
+      });
+
+      container.appendChild(card);
+    });
+  }
+
+  mostrarVideosPreview();
+
+</script>
