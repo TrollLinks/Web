@@ -11,14 +11,9 @@
       padding: 0;
       font-family: 'Orbitron', sans-serif;
       background-color: #000;
-      color: #0ff;
+      color: #fff;
       text-align: center;
       font-weight: bold;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
     }
 
     h1 {
@@ -26,31 +21,29 @@
       color: #0ff;
       text-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
       margin: 40px 0 20px;
+      font-weight: bold;
     }
 
-    /* ------------------ GENERADOR DE LINKS ------------------ */
-    #generator {
-      max-width: 600px;
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .section {
       background: #111;
       border: 2px solid #0ff;
-      border-radius: 15px;
       box-shadow: 0 0 20px #0ff;
+      border-radius: 15px;
       padding: 25px;
-      margin-bottom: 40px;
-      width: 90%;
-      text-align: left;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
+      margin: 30px 0;
       font-weight: bold;
-      font-size: 1.1rem;
+      color: #fff;
     }
 
-    input[type="text"], select, button {
+    select, input, button {
       padding: 12px 20px;
-      margin: 10px 0 20px 0;
+      margin: 10px;
       border: none;
       border-radius: 8px;
       font-size: 1rem;
@@ -61,158 +54,422 @@
       background-color: #222;
       border: 2px solid #0ff;
       box-shadow: 0 0 10px #0ff44d;
-      width: 100%;
-      max-width: 300px;
-      box-sizing: border-box;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    select:hover, input:hover, button:hover {
+      background-color: #0ff44d;
+      color: #000;
+      box-shadow: 0 0 15px #0ff44d;
     }
 
     button {
       background: #0ff;
       color: #000;
-      transition: background-color 0.3s ease;
-      cursor: pointer;
-      width: 100%;
-      max-width: 300px;
-      display: block;
-      margin: 0 auto;
+      font-weight: bold;
     }
 
-    button:hover {
-      background-color: #0cc;
+    a {
+      color: #0ff;
+      text-decoration: none;
+      font-weight: bold;
     }
 
-    #linkResult {
-      margin-top: 20px;
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .link-output {
+      background: #222;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 15px;
       word-break: break-word;
+      box-shadow: 0 0 15px #0ff44d;
+      cursor: text;
+      user-select: all;
+    }
+
+    /* Perfil */
+    #profile {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #111;
+      border: 2px solid #0ff;
+      border-radius: 15px;
+      box-shadow: 0 0 30px #0ff;
+      padding: 30px;
+      color: #fff;
+    }
+
+    #profile h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #0ff;
+      text-shadow: 0 0 15px #0ff;
+    }
+
+    #videoPreview {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #0ff44d;
+      margin-bottom: 20px;
+    }
+
+    #btnViewProfile, #btnBack {
+      background-color: #0ff;
+      color: #000;
+      border: none;
+      padding: 15px 25px;
       font-size: 1.2rem;
-      color: #0f0;
+      border-radius: 12px;
       cursor: pointer;
-      max-width: 600px;
+      font-weight: bold;
+      margin: 10px;
+      box-shadow: 0 0 10px #0ff44d;
+      transition: background-color 0.3s ease;
+    }
+
+    #btnViewProfile:hover, #btnBack:hover {
+      background-color: #0ff44d;
+    }
+
+    /* Fullscreen overlay */
+    #fullscreenOverlay {
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background: rgba(0,0,0,0.95);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #fullscreenOverlay video {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 15px;
+      box-shadow: 0 0 40px #0ff44d;
+    }
+
+    /* Aviso Legal */
+    #legalNotice {
+      background: #111;
+      border: 2px solid #0ff;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #0ff;
+      padding: 15px 25px;
+      margin: 40px auto 20px;
+      max-width: 900px;
+      color: #0ff;
+      font-size: 0.9rem;
+      font-weight: normal;
+      text-align: center;
+      user-select: none;
+    }
+
+    /* Comentarios */
+    #commentsSection {
+      max-width: 900px;
+      margin: 20px auto 40px;
+      background: #111;
+      border: 2px solid #0ff;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #0ff;
+      padding: 20px;
+      color: #fff;
+      text-align: left;
+    }
+
+    #commentsSection h3 {
+      color: #0ff;
+      margin-bottom: 10px;
       text-align: center;
     }
 
-    /* Preview miniatura en generador */
-    #videoPreview {
-      margin-top: 10px;
-      width: 100%;
-      max-width: 500px;
-      height: 280px;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 20px #0ff;
-    }
-    #videoPreview iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
+    #commentsList {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #0ff44d;
+      border-radius: 10px;
+      padding: 10px;
+      background: #222;
+      margin-bottom: 15px;
     }
 
+    .comment {
+      margin-bottom: 10px;
+      padding: 8px;
+      border-bottom: 1px solid #0ff44d;
+      word-wrap: break-word;
+      font-size: 0.9rem;
+    }
+
+    #commentForm textarea {
+      width: 100%;
+      height: 60px;
+      border-radius: 10px;
+      border: 2px solid #0ff;
+      background: #222;
+      color: #fff;
+      padding: 10px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      resize: vertical;
+      outline: none;
+    }
+
+    #commentForm button {
+      margin-top: 10px;
+      width: 100%;
+      font-size: 1.1rem;
+    }
+
+    /* Botón abrir comentarios */
+    #btnToggleComments {
+      background-color: #0ff;
+      color: #000;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0ff44d;
+      margin: 0 auto 20px;
+      display: block;
+      max-width: 300px;
+      transition: background-color 0.3s ease;
+    }
+
+    #btnToggleComments:hover {
+      background-color: #0ff44d;
+    }
   </style>
 </head>
 <body>
 
-  <!-- GENERADOR DE LINKS -->
-  <div id="generator">
-    <h1>TrollLinks - Generador de Enlaces Troll</h1>
+  <h1>TrollLinks - Generador de Enlaces Troll</h1>
 
-    <label for="usernameInput">Nombre de usuario (para el link tipo onlyfans.com/usuario):</label>
-    <input type="text" id="usernameInput" placeholder="Escribe el nombre de usuario (opcional)" maxlength="20" />
+  <div id="generator" class="container section">
+    <label for="usernameInput">Nombre de usuario (ejemplo: juan123):</label><br />
+    <input id="usernameInput" type="text" placeholder="Escribe un nombre de usuario" />
 
-    <label for="videoSelect">Selecciona un video para generar link:</label>
+    <label for="videoSelect">Selecciona un video troll:</label><br />
     <select id="videoSelect">
-      <option value="" disabled selected>-- Elige un video --</option>
-      <option value="https://www.youtube.com/embed/dQw4w9WgXcQ">Video 1 - Divertido</option>
-      <option value="https://www.youtube.com/embed/tgbNymZ7vqY">Video 2 - Música</option>
-      <option value="https://www.youtube.com/embed/3GwjfUFyY6M">Video 3 - Clásico</option>
-      <option value="https://www.youtube.com/embed/oHg5SJYRHA0">Video 4 - Sorpresa</option>
-    </select>
+      <option value="https://cdn.pixabay.com/vimeo/356114719/Monkeys-16104.mp4?width=1920&hash=8653f47a5c6ca5ea6f031dd6ed3a61d96cb07f89">Monos divertidos</option>
+      <option value="https://cdn.pixabay.com/vimeo/448950412/Water-Streams-47842.mp4?width=1920&hash=bd9aa09cc0b27be737529063f960e40e2d25a6b7">Corriente de agua</option>
+      <option value="https://cdn.pixabay.com/vimeo/356114393/Flock-of-Birds-16103.mp4?width=1920&hash=50a7b983e9de9f847b130658cecc800edbc7d5eb">Bandada de pájaros</option>
+      <option value="https://cdn.pixabay.com/vimeo/277682333/Underwater-Shark-9748.mp4?width=1920&hash=4ff4965abdf0aa22d19441510c3d0f8b30f25b5f">Tiburón bajo el agua</option>
+    </select><br />
 
-    <!-- Preview del video seleccionado -->
-    <div id="videoPreview"></div>
+    <button id="btnGenerateLink">Generar link disfrazado</button>
 
-    <button id="generateBtn">Generar link disfrazado</button>
+    <div id="generatedLink" class="link-output" style="display:none;"></div>
 
-    <div id="linkResult"></div>
+    <!-- Botón para abrir comentarios -->
+    <button id="btnToggleComments">Mostrar / Ocultar comentarios</button>
+  </div>
+
+  <!-- Aviso legal -->
+  <div id="legalNotice" class="container">
+    <p>⚠️ Este sitio es un generador de enlaces troll para diversión y entretenimiento. No almacenamos ni compartimos datos personales. Usa con responsabilidad.</p>
+  </div>
+
+  <!-- Comentarios -->
+  <div id="commentsSection" class="container section" style="display:none;">
+    <h3>Comentarios</h3>
+    <div id="commentsList"></div>
+    <form id="commentForm">
+      <textarea id="commentInput" placeholder="Escribe tu comentario aquí..." required></textarea>
+      <button type="submit">Enviar comentario</button>
+    </form>
+  </div>
+
+  <!-- Perfil -->
+  <div id="profile" style="display:none;">
+    <h2 id="profileName"></h2>
+    <video id="videoPreview" controls muted></video><br />
+    <button id="btnViewProfile">Ver perfil</button>
+    <button id="btnBack">← Volver al generador</button>
+  </div>
+
+  <!-- Fullscreen -->
+  <div id="fullscreenOverlay">
+    <video id="fullscreenVideo" controls autoplay></video>
   </div>
 
 <script>
-  const storageKey = 'trolllinks_map';
-  const videoSelect = document.getElementById('videoSelect');
-  const generateBtn = document.getElementById('generateBtn');
-  const linkResult = document.getElementById('linkResult');
   const usernameInput = document.getElementById('usernameInput');
+  const videoSelect = document.getElementById('videoSelect');
+  const btnGenerateLink = document.getElementById('btnGenerateLink');
+  const generatedLink = document.getElementById('generatedLink');
+
+  const generator = document.getElementById('generator');
+  const profile = document.getElementById('profile');
+  const profileName = document.getElementById('profileName');
   const videoPreview = document.getElementById('videoPreview');
+  const btnViewProfile = document.getElementById('btnViewProfile');
+  const btnBack = document.getElementById('btnBack');
 
-  // Generar un nombre random para disfrazar el link si no hay uno escrito
-  function generateName() {
-    return Math.random().toString(36).substring(2, 8);
+  const fullscreenOverlay = document.getElementById('fullscreenOverlay');
+  const fullscreenVideo = document.getElementById('fullscreenVideo');
+
+  const btnToggleComments = document.getElementById('btnToggleComments');
+  const commentsSection = document.getElementById('commentsSection');
+  const commentsList = document.getElementById('commentsList');
+  const commentForm = document.getElementById('commentForm');
+  const commentInput = document.getElementById('commentInput');
+
+  // Videos disponibles
+  const videos = {
+    "Monos divertidos": "https://cdn.pixabay.com/vimeo/356114719/Monkeys-16104.mp4?width=1920&hash=8653f47a5c6ca5ea6f031dd6ed3a61d96cb07f89",
+    "Corriente de agua": "https://cdn.pixabay.com/vimeo/448950412/Water-Streams-47842.mp4?width=1920&hash=bd9aa09cc0b27be737529063f960e40e2d25a6b7",
+    "Bandada de pájaros": "https://cdn.pixabay.com/vimeo/356114393/Flock-of-Birds-16103.mp4?width=1920&hash=50a7b983e9de9f847b130658cecc800edbc7d5eb",
+    "Tiburón bajo el agua": "https://cdn.pixabay.com/vimeo/277682333/Underwater-Shark-9748.mp4?width=1920&hash=4ff4965abdf0aa22d19441510c3d0f8b30f25b5f"
+  };
+
+  // Guardar datos en localStorage
+  function saveUserVideo(user, videoUrl) {
+    const data = JSON.parse(localStorage.getItem('trolllinks_data') || '{}');
+    data[user] = videoUrl;
+    localStorage.setItem('trolllinks_data', JSON.stringify(data));
   }
 
-  // Guardar en localStorage (clave: nombre, valor: video URL)
-  function saveMapping(name, videoUrl) {
-    let map = JSON.parse(localStorage.getItem(storageKey) || '{}');
-    map[name] = videoUrl;
-    localStorage.setItem(storageKey, JSON.stringify(map));
+  // Obtener video de usuario
+  function getUserVideo(user) {
+    const data = JSON.parse(localStorage.getItem('trolllinks_data') || '{}');
+    return data[user];
   }
 
-  // Actualiza el preview del video cuando cambie la selección
-  videoSelect.addEventListener('change', () => {
-    const url = videoSelect.value;
-    if (!url) {
-      videoPreview.innerHTML = '';
+  // Generar link disfrazado y mostrar el verdadero abajo
+  btnGenerateLink.addEventListener('click', () => {
+    const user = usernameInput.value.trim();
+    if (!user) {
+      alert('Por favor, ingresa un nombre de usuario válido.');
       return;
     }
-    videoPreview.innerHTML = `
-      <iframe
-        src="${url}?controls=1&rel=0&modestbranding=1"
-        allowfullscreen
-        allow="fullscreen"
-        title="Preview de video"
-      ></iframe>
-    `;
-  });
-
-  // Evento para generar link disfrazado
-  generateBtn.addEventListener('click', () => {
     const videoUrl = videoSelect.value;
-    if (!videoUrl) {
-      alert('Por favor, selecciona un video válido.');
-      return;
-    }
+    saveUserVideo(user, videoUrl);
 
-    // Leer nombre de usuario, si está vacío, generar uno random
-    let userName = usernameInput.value.trim();
-    if (!userName) {
-      userName = generateName();
-    } else {
-      // Limpiar nombre para URL: solo letras, números, guiones bajos, sin espacios
-      userName = userName.toLowerCase().replace(/[^a-z0-9_]/g, '');
-      if (!userName) {
-        alert('El nombre de usuario contiene caracteres inválidos.');
-        return;
-      }
-    }
+    const disguisedLink = `https://onlyfans.com/${user}`;
+    const realLink = `${location.origin}${location.pathname}?user=${encodeURIComponent(user)}`;
 
-    saveMapping(userName, videoUrl);
-
-    // Link disfrazado (visible al usuario)
-    const disguisedLink = `https://onlyfans.com/${userName}`;
-
-    // Link real para abrir la misma página pero con ?user=nombre
-    const realLink = `${window.location.origin + window.location.pathname}?user=${userName}`;
-
-    linkResult.innerHTML = `
-      Link disfrazado:<br />
-      <a href="${realLink}" target="_blank" rel="noopener">${disguisedLink}</a><br/>
-      (Al abrirlo se mostrará la página tipo perfil)
+    generatedLink.style.display = 'block';
+    generatedLink.innerHTML = `
+      <p>Link disfrazado para compartir:</p>
+      <p style="font-size:1.3rem; color:#0ff;">${disguisedLink}</p>
+      <p style="margin-top:10px;">(El link real para abrir el perfil es este):</p>
+      <p style="font-size:1rem; word-break:break-word;"><a href="${realLink}">${realLink}</a></p>
     `;
   });
 
-  // (Opcional) Limpiar preview si se borra la selección
-  if(!videoSelect.value) {
-    videoPreview.innerHTML = '';
+  // Mostrar generador
+  function showGenerator() {
+    profile.style.display = 'none';
+    generator.style.display = 'block';
   }
-</script>
 
+  // Mostrar perfil
+  function showProfile(user) {
+    generator.style.display = 'none';
+    profile.style.display = 'block';
+    profileName.textContent = user;
+
+    const videoUrl = getUserVideo(user);
+    if (videoUrl) {
+      videoPreview.src = videoUrl;
+    } else {
+      videoPreview.src = '';
+      alert('Usuario no encontrado o video no asignado.');
+      showGenerator();
+    }
+  }
+
+  // Abrir video en fullscreen con autoplay
+  btnViewProfile.addEventListener('click', () => {
+    if (!videoPreview.src) return;
+    fullscreenVideo.src = videoPreview.src;
+    fullscreenOverlay.style.display = 'flex';
+    fullscreenVideo.play();
+  });
+
+  // Volver al generador
+  btnBack.addEventListener('click', () => {
+    showGenerator();
+    history.replaceState(null, '', location.pathname); // limpia parámetros URL
+  });
+
+  // Cerrar fullscreen al hacer click fuera del video
+  fullscreenOverlay.addEventListener('click', (e) => {
+    if (e.target === fullscreenOverlay) {
+      fullscreenVideo.pause();
+      fullscreenVideo.src = '';
+      fullscreenOverlay.style.display = 'none';
+    }
+  });
+
+  // Toggle sección comentarios
+  btnToggleComments.addEventListener('click', () => {
+    if (commentsSection.style.display === 'none' || commentsSection.style.display === '') {
+      commentsSection.style.display = 'block';
+      loadComments();
+      btnToggleComments.textContent = 'Ocultar comentarios';
+    } else {
+      commentsSection.style.display = 'none';
+      btnToggleComments.textContent = 'Mostrar comentarios';
+    }
+  });
+
+  // Guardar comentario
+  commentForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const comment = commentInput.value.trim();
+    if (!comment) return;
+    addComment(comment);
+    commentInput.value = '';
+  });
+
+  // Comentarios en localStorage con key 'trolllinks_comments'
+  function loadComments() {
+    const comments = JSON.parse(localStorage.getItem('trolllinks_comments') || '[]');
+    commentsList.innerHTML = '';
+    if (comments.length === 0) {
+      commentsList.innerHTML = '<p style="text-align:center; color:#0ff;">No hay comentarios aún. Sé el primero :)</p>';
+      return;
+    }
+    comments.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'comment';
+      div.textContent = c;
+      commentsList.appendChild(div);
+    });
+  }
+
+  function addComment(comment) {
+    const comments = JSON.parse(localStorage.getItem('trolllinks_comments') || '[]');
+    comments.push(comment);
+    localStorage.setItem('trolllinks_comments', JSON.stringify(comments));
+    loadComments();
+  }
+
+  // Detectar parámetro ?user=xxx en URL para abrir perfil directo
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  window.onload = () => {
+    const user = getQueryParam('user');
+    if (user) {
+      showProfile(user);
+    } else {
+      showGenerator();
+    }
+  };
+</script>
 </body>
 </html>
