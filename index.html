@@ -61,355 +61,82 @@
       background: #0ff;
       color: #000;
       cursor: pointer;
-      transition: 0.3s ease;
-      box-shadow: 0 0 15px #0ff;
-      font-weight: bold;
     }
 
     button:hover {
-      background: #00f7ff;
-      transform: scale(1.05);
+      background-color: #00ccff;
     }
 
-    .generated-link {
-      background: #111;
-      padding: 12px 20px;
-      border-radius: 10px;
-      margin: 20px auto;
-      display: inline-block;
-      color: #0ff;
-      font-size: 1.1rem;
-      box-shadow: 0 0 10px #0ff;
-      user-select: all;
-      font-weight: bold;
-    }
-
-    .embed {
-      margin: 30px auto;
-      max-width: 640px;
-      border: 4px solid #0ff;
-      box-shadow: 0 0 25px #0ff;
-      border-radius: 15px;
-      overflow: hidden;
-    }
-
-    h2, h3 {
-      color: #0ff;
-      text-shadow: 0 0 10px #0ff;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-
-    .socials b {
-      display: block;
-      margin: 10px 0;
-      font-size: 1.1rem;
-      color: #fff;
-      cursor: pointer;
-      user-select: none;
-      transition: color 0.3s ease;
-      font-weight: bold;
-    }
-
-    .socials b:hover {
-      color: #00ffff;
-      text-decoration: underline;
-    }
-
-    .legal b {
-      display: block;
-      margin: 10px 0;
-      font-size: 1.1rem;
-      color: #fff;
-      font-weight: bold;
-      text-shadow: none;
-    }
-
-    /* Galería de videos */
-    #videoGallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-top: 30px;
-    }
-
-    .video-item {
-      border: 3px solid #0ff;
-      box-shadow: 0 0 15px #0ff;
-      border-radius: 15px;
-      overflow: hidden;
-      background: #111;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-
-    .video-item:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 30px #0ff;
-    }
-
-    .video-item iframe {
-      width: 100%;
-      height: 140px;
-      pointer-events: none; /* evitar interacción en thumbnails */
-    }
-
-    /* Comentarios */
-    #commentsSection {
-      background: #111;
-      border: 2px solid #0ff;
-      box-shadow: 0 0 20px #0ff;
-      border-radius: 15px;
-      padding: 20px;
-      max-width: 700px;
-      margin: 30px auto;
-      display: none; /* Oculto por defecto */
-      text-align: left;
-      font-weight: normal;
-    }
-
-    #commentsList {
-      max-height: 200px;
-      overflow-y: auto;
-      margin-bottom: 15px;
-      border: 1px solid #0ff;
+    .link-container {
+      margin-top: 20px;
       padding: 10px;
-      border-radius: 10px;
-      background-color: #000;
-      color: #0ff;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: bold;
     }
 
-    #commentInput {
-      width: 100%;
+    .link-container a {
+      font-size: 1.2rem;
+      color: #0ff;
+      text-decoration: none;
       padding: 10px;
-      border-radius: 10px;
-      border: 2px solid #0ff;
-      background-color: #222;
-      color: #0ff;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: bold;
-      outline: none;
-    }
-
-    #addCommentBtn {
-      margin-top: 10px;
-      background: #0ff;
-      color: #000;
-      border: none;
       border-radius: 8px;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 0 10px #0ff;
-      transition: 0.3s ease;
-    }
-
-    #addCommentBtn:hover {
-      background: #00f7ff;
-      transform: scale(1.05);
-    }
-
-    #toggleCommentsBtn {
-      background: transparent;
+      background-color: #222;
       border: 2px solid #0ff;
-      border-radius: 10px;
-      color: #0ff;
-      padding: 10px 25px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 10px #0ff;
-      transition: 0.3s ease;
-      margin-bottom: 20px;
+      box-shadow: 0 0 10px #0ff44d;
     }
 
-    #toggleCommentsBtn:hover {
-      background: #00f7ff;
+    .link-container a:hover {
+      background-color: #0ff;
       color: #000;
-      transform: scale(1.05);
     }
   </style>
 </head>
 <body>
-
-  <h1>🎭 TrollLinks</h1>
+  <h1>TrollLinks - Generador de Enlaces Troll</h1>
   <div class="container">
-
-    <!-- Sección de Generador -->
     <div class="section">
-      <h2>🎯 Generador de Link Troll</h2>
-      <select id="videoSelector">
-        <option value="https://www.youtube.com/embed/dQw4w9WgXcQ">Rickroll clásico</option>
-        <option value="https://www.youtube.com/embed/ub82Xb1C8os">Buey girando</option>
-        <option value="https://www.youtube.com/embed/ZZ5LpwO-An4">He-Man canta</option>
-        <option value="https://www.youtube.com/embed/tVj0ZTS4WF4">Rickroll HD</option>
-        <option value="https://www.youtube.com/embed/xvFZjo5PgG0">Never Gonna Give You Up (HD oficial)</option>
-        <option value="https://www.youtube.com/embed/IwzUs1IMdyQ">Dramatic Chipmunk</option>
-        <option value="https://www.youtube.com/embed/Sagg08DrO5U">¡Surprise!</option>
-        <option value="https://www.youtube.com/embed/9Deg7VrpHbM">Megalovania Remix</option>
-        <option value="https://www.youtube.com/embed/oHg5SJYRHA0">Rickroll alternativo</option>
-      </select><br />
-      <input type="text" id="customName" placeholder="Escribe el nombre del link" /><br />
-      <button onclick="generateLink()">Generar Link Troll</button>
-      <div id="generated" class="generated-link" style="display:none;"></div>
-      <button id="copyBtn" style="display:none;" onclick="copyLink()">Copiar Link</button>
+      <h2>Generar Enlace Troll</h2>
+      <label for="videoSelect">Selecciona un video:</label>
+      <select id="videoSelect">
+        <option value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Rickroll (YouTube)</option>
+        <option value="https://www.youtube.com/watch?v=3JZ_D3ELwOQ">Another Video (YouTube)</option>
+        <!-- Puedes añadir más opciones aquí -->
+      </select>
+      <button onclick="generateLink()">Generar Enlace</button>
     </div>
 
-    <!-- Sección de Video -->
-    <div class="section" id="videoEmbed" style="display:none;">
-      <h2>🎬 Video Troll</h2>
-      <div class="embed">
-        <iframe id="videoFrame" width="100%" height="360" frameborder="0" allowfullscreen></iframe>
-      </div>
+    <div class="link-container" id="linkContainer" style="display:none;">
+      <h3>Enlace Generado:</h3>
+      <a id="generatedLink" href="#" target="_blank" onclick="openFullscreen()">Haz clic para abrir el video en pantalla completa</a>
     </div>
-
-    <!-- Galería de Videos -->
-    <div class="section">
-      <h2>🎥 Previsualización de Videos Troll</h2>
-      <div id="videoGallery"></div>
-    </div>
-
-    <!-- Botón para comentarios -->
-    <button id="toggleCommentsBtn">💬 Mostrar/Ocultar Comentarios</button>
-
-    <!-- Sección Comentarios -->
-    <div id="commentsSection">
-      <div id="commentsList"></div>
-      <input type="text" id="commentInput" placeholder="Escribe tu comentario aquí..." />
-      <button id="addCommentBtn">Enviar comentario</button>
-    </div>
-
-    <!-- Sección de Redes -->
-    <div class="section socials">
-      <h2>🌐 Mis redes sociales</h2>
-      <b onclick="window.open('https://www.tiktok.com/@violentflow', '_blank')">🎵 TikTok: @violentflow</b>
-      <b onclick="window.open('https://www.youtube.com/channel/UCyqO_K-rM_6W5cY7HQt0TrQ', '_blank')">📺 YouTube: Violent Flow Oficial</b>
-      <b onclick="window.open('https://discord.gg/tuServidorDiscord', '_blank')">💬 Discord: Únete a nuestro servidor [PROXIMAMENTE]</b>
-    </div>
-
-    <!-- Sección Legal -->
-    <div class="section legal">
-      <h3>⚠️ Descargo de responsabilidad</h3>
-      <b>No nos hacemos responsables del uso indebido de los enlaces generados.</b>
-      <b>🧪 Esta es una versión de prueba / beta del sitio web.</b>
-    </div>
-
   </div>
 
   <script>
-    const videos = [
-      {name: "Rickroll clásico", url:"https://www.youtube.com/embed/dQw4w9WgXcQ"},
-      {name: "Buey girando", url:"https://www.youtube.com/embed/ub82Xb1C8os"},
-      {name: "He-Man canta", url:"https://www.youtube.com/embed/ZZ5LpwO-An4"},
-      {name: "Rickroll HD", url:"https://www.youtube.com/embed/tVj0ZTS4WF4"},
-      {name: "Never Gonna Give You Up (HD oficial)", url:"https://www.youtube.com/embed/xvFZjo5PgG0"},
-      {name: "Dramatic Chipmunk", url:"https://www.youtube.com/embed/IwzUs1IMdyQ"},
-      {name: "¡Surprise!", url:"https://www.youtube.com/embed/Sagg08DrO5U"},
-      {name: "Megalovania Remix", url:"https://www.youtube.com/embed/9Deg7VrpHbM"},
-      {name: "Rickroll alternativo", url:"https://www.youtube.com/embed/oHg5SJYRHA0"},
-    ];
-
     function generateLink() {
-      const name = document.getElementById("customName").value.trim();
-      const selectedVideo = document.getElementById("videoSelector").value;
-      if (!name) return alert("Escribe un nombre para tu link troll.");
-
-      // Construimos el link con el parámetro link
-      const fullLink = `${location.origin}${location.pathname}?link=${encodeURIComponent(name)}`;
-      document.getElementById("generated").innerText = fullLink;
-      document.getElementById("generated").style.display = "inline-block";
-      document.getElementById("copyBtn").style.display = "inline-block";
-
-      // Guardamos el video asociado solo en sessionStorage (no listado público)
-      sessionStorage.setItem(name, selectedVideo);
+      const selectElement = document.getElementById('videoSelect');
+      const videoUrl = selectElement.value;
+      const linkContainer = document.getElementById('linkContainer');
+      const generatedLink = document.getElementById('generatedLink');
+      
+      // Configura el enlace generado
+      generatedLink.href = videoUrl;
+      
+      // Muestra el enlace
+      linkContainer.style.display = 'block';
     }
 
-    function copyLink() {
-      const text = document.getElementById("generated").innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("¡Link copiado!");
-      });
+    // Función para abrir el video en pantalla completa
+    function openFullscreen() {
+      const videoUrl = document.getElementById('generatedLink').href;
+      const iframe = document.createElement('iframe');
+      iframe.src = videoUrl + "?autoplay=1&fs=1"; // Añadido para pantalla completa automáticamente
+      iframe.style.position = 'absolute';
+      iframe.style.top = '0';
+      iframe.style.left = '0';
+      iframe.style.width = '100vw';
+      iframe.style.height = '100vh';
+      iframe.style.border = 'none';
+      document.body.innerHTML = ''; // Limpiar contenido previo
+      document.body.appendChild(iframe); // Añadir iframe de pantalla completa
     }
-
-    // Comentarios con localStorage (simple)
-    function loadComments() {
-      const commentsJSON = localStorage.getItem("trollLinksComments");
-      return commentsJSON ? JSON.parse(commentsJSON) : [];
-    }
-
-    function saveComments(comments) {
-      localStorage.setItem("trollLinksComments", JSON.stringify(comments));
-    }
-
-    function renderComments() {
-      const commentsList = document.getElementById("commentsList");
-      const comments = loadComments();
-      if(comments.length === 0) {
-        commentsList.innerHTML = "<i>No hay comentarios aún. Sé el primero en comentar.</i>";
-        return;
-      }
-      commentsList.innerHTML = comments.map(c => `<p>💬 ${escapeHtml(c)}</p>`).join("");
-    }
-
-    function escapeHtml(text) {
-      return text.replace(/&/g, "&amp;")
-                 .replace(/</g, "&lt;")
-                 .replace(/>/g, "&gt;")
-                 .replace(/"/g, "&quot;")
-                 .replace(/'/g, "&#039;");
-    }
-
-    function addComment() {
-      const input = document.getElementById("commentInput");
-      const comment = input.value.trim();
-      if (!comment) {
-        alert("Escribe un comentario antes de enviar.");
-        return;
-      }
-      const comments = loadComments();
-      comments.push(comment);
-      saveComments(comments);
-      input.value = "";
-      renderComments();
-    }
-
-    document.getElementById("addCommentBtn").addEventListener("click", addComment);
-    document.getElementById("toggleCommentsBtn").addEventListener("click", () => {
-      const commentsSection = document.getElementById("commentsSection");
-      if (commentsSection.style.display === "none" || commentsSection.style.display === "") {
-        commentsSection.style.display = "block";
-        renderComments();
-      } else {
-        commentsSection.style.display = "none";
-      }
-    });
-
-    window.onload = () => {
-      const params = new URLSearchParams(window.location.search);
-      const linkName = params.get("link");
-      if (linkName) {
-        // Mostramos el video asociado almacenado en sessionStorage o el primero
-        const videoURL = sessionStorage.getItem(linkName) || videos[0].url;
-        document.getElementById("videoEmbed").style.display = "block";
-        document.getElementById("videoFrame").src = videoURL;
-      }
-
-      // Galería de videos
-      const gallery = document.getElementById("videoGallery");
-      for (const vid of videos) {
-        const div = document.createElement("div");
-        div.className = "video-item";
-        div.title = vid.name;
-        div.innerHTML = `<iframe src="${vid.url}" frameborder="0" allowfullscreen></iframe><p>${vid.name}</p>`;
-        div.onclick = () => {
-          document.getElementById("videoEmbed").style.display = "block";
-          document.getElementById("videoFrame").src = vid.url;
-        }
-        gallery.appendChild(div);
-      }
-    };
   </script>
-
 </body>
 </html>
