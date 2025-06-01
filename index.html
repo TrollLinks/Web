@@ -14,6 +14,11 @@
       color: #0ff;
       text-align: center;
       font-weight: bold;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
     h1 {
@@ -25,17 +30,18 @@
 
     .container {
       max-width: 600px;
-      margin: auto;
-      padding: 20px;
       background: #111;
       border: 2px solid #0ff;
       border-radius: 15px;
       box-shadow: 0 0 20px #0ff;
+      padding: 25px;
+      margin-bottom: 40px;
+      width: 90%;
     }
 
-    select, input, button {
+    select, button {
       padding: 12px 20px;
-      margin: 10px;
+      margin: 10px 0;
       border: none;
       border-radius: 8px;
       font-size: 1rem;
@@ -47,91 +53,175 @@
       border: 2px solid #0ff;
       box-shadow: 0 0 10px #0ff44d;
       cursor: pointer;
+      width: 100%;
+      max-width: 300px;
     }
 
     button {
       background: #0ff;
       color: #000;
       transition: background-color 0.3s ease;
+      margin-top: 20px;
     }
 
     button:hover {
       background-color: #0cc;
     }
 
-    input[type="text"] {
-      width: 80%;
-      font-weight: bold;
-    }
-
     #linkResult {
       margin-top: 20px;
-      word-break: break-all;
+      word-break: break-word;
       font-size: 1.2rem;
       color: #0f0;
       cursor: pointer;
+    }
+
+    /* Vista perfil temporal dentro de la misma página */
+    #profileView {
+      display: none;
+      background: #111;
+      border: 2px solid #0ff;
+      box-shadow: 0 0 25px #0ff;
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 500px;
+      margin-top: 30px;
+      width: 90%;
+    }
+
+    #profileView h2 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #0ff;
     }
   </style>
 </head>
 <body>
   <h1>TrollLinks - Generador de Enlaces Troll</h1>
-  <div class="container">
-    <label for="videoUrl">URL del video (YouTube embebible):</label><br />
-    <input type="text" id="videoUrl" placeholder="https://www.youtube.com/embed/VIDEO_ID" />
-    <br />
+  <div class="container" id="generator">
+    <label for="videoSelect">Selecciona un video para generar link:</label><br />
+    <select id="videoSelect">
+      <option value="" disabled selected>-- Elige un video --</option>
+      <option value="https://www.youtube.com/embed/dQw4w9WgXcQ">Video 1 - Divertido</option>
+      <option value="https://www.youtube.com/embed/tgbNymZ7vqY">Video 2 - Música</option>
+      <option value="https://www.youtube.com/embed/3GwjfUFyY6M">Video 3 - Clásico</option>
+      <option value="https://www.youtube.com/embed/oHg5SJYRHA0">Video 4 - Sorpresa</option>
+      <!-- Aquí agrega solo videos aprobados y sin +18 -->
+    </select>
+
     <button id="generateBtn">Generar link disfrazado</button>
 
     <div id="linkResult"></div>
   </div>
 
+  <div id="profileView">
+    <h2 id="profileName"></h2>
+    <button id="viewProfileBtn">Ver perfil</button>
+  </div>
+
   <script>
+    // Lista para guardar links disfrazados en localStorage
+    // key: nombre (random), value: videoUrl
+    const storageKey = 'trolllinks_map';
+
+    const videoSelect = document.getElementById('videoSelect');
     const generateBtn = document.getElementById('generateBtn');
     const linkResult = document.getElementById('linkResult');
+    const profileView = document.getElementById('profileView');
+    const profileName = document.getElementById('profileName');
+    const viewProfileBtn = document.getElementById('viewProfileBtn');
+    const generator = document.getElementById('generator');
 
+    // Función para generar nombre random tipo onlyfans
+    function generateName() {
+      return Math.random().toString(36).substring(2, 8);
+    }
+
+    // Guarda el mapping en localStorage
+    function saveMapping(name, videoUrl) {
+      let map = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      map[name] = videoUrl;
+      localStorage.setItem(storageKey, JSON.stringify(map));
+    }
+
+    // Recupera video por nombre
+    function getVideoUrl(name) {
+      let map = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      return map[name];
+    }
+
+    // Genera link disfrazado
     generateBtn.addEventListener('click', () => {
-      const videoUrl = document.getElementById('videoUrl').value.trim();
-
+      const videoUrl = videoSelect.value;
       if (!videoUrl) {
-        alert('Por favor, ingresa una URL de video válida.');
+        alert('Por favor, selecciona un video válido.');
         return;
       }
 
-      // Base URL disfrazada tipo onlyfans.com/nombre
-      // Para esto, en producción se usaría un backend para redirigir,
-      // pero aquí simulamos un parámetro simple con un "nombre" arbitrario.
+      const randomName = generateName();
 
-      // Generamos un "nombre" aleatorio sencillo (ejemplo)
-      const randomName = Math.random().toString(36).substring(2, 8);
+      saveMapping(randomName, videoUrl);
 
-      // Construimos el link disfrazado (tu dominio cambia según donde alojes)
-      // Aquí como ejemplo https://onlyfans.com/{randomName}
-      // Que redirigirá a nuestra página video.html con el parámetro videoUrl codificado.
-
-      // En lugar de solofans.com (no se puede usar ese dominio),
-      // en tu web usa tu dominio, ejemplo trolllinks.github.io/onlyfans.com/{randomName}
-      // Pero para este demo, usamos el formato con query string:
-
-      const baseUrl = window.location.origin + "/video.html";
-
-      // Codificamos la URL del video para pasarla segura en el query param
-      const encodedVideoUrl = encodeURIComponent(videoUrl);
-
-      // Construimos la URL real que abrirá la página perfil con el video
-      const finalUrl = `${baseUrl}?video=${encodedVideoUrl}&user=${randomName}`;
-
-      // Mostramos el link disfrazado con el formato onlyfans.com/nombre
+      // Mostramos link disfrazado tipo onlyfans.com/nombre
+      // Pero el enlace realmente abrirá la misma página con ?user=nombre
+      // para simular el perfil y cargar video
       const disguisedLink = `https://onlyfans.com/${randomName}`;
 
-      // Guardamos el mapping en localStorage para el ejemplo
-      // (En producción usar un backend para resolver disguisedLink → finalUrl)
-      localStorage.setItem(randomName, finalUrl);
+      // Para demo local, abrimos con la misma página y params
+      const realLink = `${window.location.origin + window.location.pathname}?user=${randomName}`;
 
       linkResult.innerHTML = `
-        Link disfrazado:<br/>
-        <a href="${finalUrl}" target="_blank">${disguisedLink}</a><br/>
-        (Al abrir este link, verás la página perfil y podrás ver el video)
+        Link disfrazado:<br />
+        <a href="${realLink}" target="_blank">${disguisedLink}</a><br/>
+        (Al abrirlo se mostrará la página tipo perfil)
       `;
     });
+
+    // Función para mostrar la vista perfil interna
+    function showProfile(name, videoUrl) {
+      profileName.textContent = name;
+      profileView.style.display = 'block';
+      generator.style.display = 'none';
+
+      // Botón para ver el video en fullscreen con autoplay
+      viewProfileBtn.onclick = () => {
+        const iframe = document.createElement('iframe');
+        iframe.src = `${videoUrl}?autoplay=1&controls=0&fs=1&modestbranding=1&rel=0`;
+        iframe.allow = "autoplay; fullscreen";
+        iframe.style.position = "fixed";
+        iframe.style.top = 0;
+        iframe.style.left = 0;
+        iframe.style.width = "100vw";
+        iframe.style.height = "100vh";
+        iframe.style.border = "none";
+        iframe.style.zIndex = 9999;
+        document.body.appendChild(iframe);
+
+        // Intentamos fullscreen
+        if (iframe.requestFullscreen) {
+          iframe.requestFullscreen();
+        } else if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen();
+        }
+      };
+    }
+
+    // Cuando carga la página, si detectamos param ?user=xxx mostramos perfil
+    window.onload = () => {
+      const params = new URLSearchParams(window.location.search);
+      const user = params.get('user');
+
+      if (user) {
+        const videoUrl = getVideoUrl(user);
+        if (videoUrl) {
+          showProfile(user, videoUrl);
+        } else {
+          alert('Usuario no válido o link expirado.');
+          // Podemos quitar parámetros y mostrar generador
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      }
+    };
   </script>
 </body>
 </html>
