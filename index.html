@@ -11,10 +11,9 @@
       padding: 0;
       font-family: 'Orbitron', sans-serif;
       background-color: #000;
-      color: #fff;
+      color: #0ff;
       text-align: center;
       font-weight: bold;
-      color: #fff;
     }
 
     h1 {
@@ -22,24 +21,16 @@
       color: #0ff;
       text-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
       margin: 40px 0 20px;
-      font-weight: bold;
     }
 
     .container {
-      max-width: 900px;
+      max-width: 600px;
       margin: auto;
       padding: 20px;
-    }
-
-    .section {
       background: #111;
       border: 2px solid #0ff;
-      box-shadow: 0 0 20px #0ff;
       border-radius: 15px;
-      padding: 25px;
-      margin: 30px 0;
-      font-weight: bold;
-      color: #fff;
+      box-shadow: 0 0 20px #0ff;
     }
 
     select, input, button {
@@ -55,88 +46,92 @@
       background-color: #222;
       border: 2px solid #0ff;
       box-shadow: 0 0 10px #0ff44d;
+      cursor: pointer;
     }
 
     button {
       background: #0ff;
       color: #000;
-      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: #00ccff;
+      background-color: #0cc;
     }
 
-    .link-container {
+    input[type="text"] {
+      width: 80%;
+      font-weight: bold;
+    }
+
+    #linkResult {
       margin-top: 20px;
-      padding: 10px;
-    }
-
-    .link-container a {
+      word-break: break-all;
       font-size: 1.2rem;
-      color: #0ff;
-      text-decoration: none;
-      padding: 10px;
-      border-radius: 8px;
-      background-color: #222;
-      border: 2px solid #0ff;
-      box-shadow: 0 0 10px #0ff44d;
-    }
-
-    .link-container a:hover {
-      background-color: #0ff;
-      color: #000;
+      color: #0f0;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <h1>TrollLinks - Generador de Enlaces Troll</h1>
   <div class="container">
-    <div class="section">
-      <h2>Generar Enlace Troll</h2>
-      <label for="videoSelect">Selecciona un video:</label>
-      <select id="videoSelect">
-        <option value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Rickroll (YouTube)</option>
-        <option value="https://www.youtube.com/watch?v=3JZ_D3ELwOQ">Another Video (YouTube)</option>
-        <!-- Puedes añadir más opciones aquí -->
-      </select>
-      <button onclick="generateLink()">Generar Enlace</button>
-    </div>
+    <label for="videoUrl">URL del video (YouTube embebible):</label><br />
+    <input type="text" id="videoUrl" placeholder="https://www.youtube.com/embed/VIDEO_ID" />
+    <br />
+    <button id="generateBtn">Generar link disfrazado</button>
 
-    <div class="link-container" id="linkContainer" style="display:none;">
-      <h3>Enlace Generado:</h3>
-      <a id="generatedLink" href="#" target="_blank" onclick="openFullscreen()">Haz clic para abrir el video en pantalla completa</a>
-    </div>
+    <div id="linkResult"></div>
   </div>
 
   <script>
-    function generateLink() {
-      const selectElement = document.getElementById('videoSelect');
-      const videoUrl = selectElement.value;
-      const linkContainer = document.getElementById('linkContainer');
-      const generatedLink = document.getElementById('generatedLink');
-      
-      // Configura el enlace generado
-      generatedLink.href = videoUrl;
-      
-      // Muestra el enlace
-      linkContainer.style.display = 'block';
-    }
+    const generateBtn = document.getElementById('generateBtn');
+    const linkResult = document.getElementById('linkResult');
 
-    // Función para abrir el video en pantalla completa
-    function openFullscreen() {
-      const videoUrl = document.getElementById('generatedLink').href;
-      const iframe = document.createElement('iframe');
-      iframe.src = videoUrl + "?autoplay=1&fs=1"; // Añadido para pantalla completa automáticamente
-      iframe.style.position = 'absolute';
-      iframe.style.top = '0';
-      iframe.style.left = '0';
-      iframe.style.width = '100vw';
-      iframe.style.height = '100vh';
-      iframe.style.border = 'none';
-      document.body.innerHTML = ''; // Limpiar contenido previo
-      document.body.appendChild(iframe); // Añadir iframe de pantalla completa
-    }
+    generateBtn.addEventListener('click', () => {
+      const videoUrl = document.getElementById('videoUrl').value.trim();
+
+      if (!videoUrl) {
+        alert('Por favor, ingresa una URL de video válida.');
+        return;
+      }
+
+      // Base URL disfrazada tipo onlyfans.com/nombre
+      // Para esto, en producción se usaría un backend para redirigir,
+      // pero aquí simulamos un parámetro simple con un "nombre" arbitrario.
+
+      // Generamos un "nombre" aleatorio sencillo (ejemplo)
+      const randomName = Math.random().toString(36).substring(2, 8);
+
+      // Construimos el link disfrazado (tu dominio cambia según donde alojes)
+      // Aquí como ejemplo https://onlyfans.com/{randomName}
+      // Que redirigirá a nuestra página video.html con el parámetro videoUrl codificado.
+
+      // En lugar de solofans.com (no se puede usar ese dominio),
+      // en tu web usa tu dominio, ejemplo trolllinks.github.io/onlyfans.com/{randomName}
+      // Pero para este demo, usamos el formato con query string:
+
+      const baseUrl = window.location.origin + "/video.html";
+
+      // Codificamos la URL del video para pasarla segura en el query param
+      const encodedVideoUrl = encodeURIComponent(videoUrl);
+
+      // Construimos la URL real que abrirá la página perfil con el video
+      const finalUrl = `${baseUrl}?video=${encodedVideoUrl}&user=${randomName}`;
+
+      // Mostramos el link disfrazado con el formato onlyfans.com/nombre
+      const disguisedLink = `https://onlyfans.com/${randomName}`;
+
+      // Guardamos el mapping en localStorage para el ejemplo
+      // (En producción usar un backend para resolver disguisedLink → finalUrl)
+      localStorage.setItem(randomName, finalUrl);
+
+      linkResult.innerHTML = `
+        Link disfrazado:<br/>
+        <a href="${finalUrl}" target="_blank">${disguisedLink}</a><br/>
+        (Al abrir este link, verás la página perfil y podrás ver el video)
+      `;
+    });
   </script>
 </body>
 </html>
