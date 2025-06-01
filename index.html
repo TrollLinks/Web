@@ -68,22 +68,75 @@
       color: #0f0;
       cursor: pointer;
     }
-    /* Vista perfil temporal dentro de la misma página */
+
+    /* Perfil estilo OnlyFans */
     #profileView {
       display: none;
       background: #111;
       border: 2px solid #0ff;
-      box-shadow: 0 0 25px #0ff;
+      box-shadow: 0 0 30px #0ff;
       border-radius: 15px;
       padding: 30px;
-      max-width: 500px;
+      max-width: 400px;
       margin-top: 30px;
       width: 90%;
+      color: #fff;
+      font-weight: normal;
+      font-family: Arial, sans-serif;
     }
-    #profileView h2 {
-      font-size: 2.5rem;
-      margin-bottom: 30px;
-      text-shadow: 0 0 10px #0ff;
+    #profileHeader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    #profileNameInput {
+      font-size: 2rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #0ff;
+      color: #0ff;
+      font-weight: bold;
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    #profileNameInput:focus {
+      border-color: #0f0;
+      color: #0f0;
+    }
+    #profilePreview {
+      width: 100%;
+      height: 200px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 15px #0ff;
+      margin-bottom: 25px;
+    }
+    #profilePreview iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    #viewProfileBtn {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-radius: 8px;
+      border: none;
+      background: #0ff;
+      color: #000;
+      box-shadow: 0 0 20px #0ff;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      max-width: 300px;
+    }
+    #viewProfileBtn:hover {
+      background-color: #0cc;
     }
   </style>
 </head>
@@ -97,7 +150,6 @@
       <option value="https://www.youtube.com/embed/tgbNymZ7vqY">Video 2 - Música</option>
       <option value="https://www.youtube.com/embed/3GwjfUFyY6M">Video 3 - Clásico</option>
       <option value="https://www.youtube.com/embed/oHg5SJYRHA0">Video 4 - Sorpresa</option>
-      <!-- Aquí agrega solo videos aprobados y sin +18 -->
     </select>
 
     <button id="generateBtn">Generar link disfrazado</button>
@@ -106,7 +158,10 @@
   </div>
 
   <div id="profileView">
-    <h2 id="profileName"></h2>
+    <div id="profileHeader">
+      <input type="text" id="profileNameInput" value="" />
+    </div>
+    <div id="profilePreview"></div>
     <button id="viewProfileBtn">Ver perfil</button>
   </div>
 
@@ -116,7 +171,8 @@
     const generateBtn = document.getElementById('generateBtn');
     const linkResult = document.getElementById('linkResult');
     const profileView = document.getElementById('profileView');
-    const profileName = document.getElementById('profileName');
+    const profileNameInput = document.getElementById('profileNameInput');
+    const profilePreview = document.getElementById('profilePreview');
     const viewProfileBtn = document.getElementById('viewProfileBtn');
     const generator = document.getElementById('generator');
 
@@ -155,16 +211,26 @@
 
       linkResult.innerHTML = `
         Link disfrazado:<br />
-        <a href="${realLink}" target="_blank">${disguisedLink}</a><br/>
+        <a href="${realLink}" target="_blank" rel="noopener">${disguisedLink}</a><br/>
         (Al abrirlo se mostrará la página tipo perfil)
       `;
     });
 
     // Mostrar vista de perfil con botón para reproducir video fullscreen y autoplay
     function showProfile(name, videoUrl) {
-      profileName.textContent = name;
+      profileNameInput.value = name;
       profileView.style.display = 'block';
       generator.style.display = 'none';
+
+      // Insertar preview iframe sin autoplay ni controles
+      profilePreview.innerHTML = `
+        <iframe
+          src="${videoUrl}?controls=1&rel=0&modestbranding=1"
+          allow="fullscreen"
+          allowfullscreen
+          title="Preview de video"
+        ></iframe>
+      `;
 
       viewProfileBtn.onclick = () => {
         const iframe = document.createElement('iframe');
